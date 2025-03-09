@@ -5,10 +5,10 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
-endpoint: https://192.168.1.26:6443
+endpoint: https://192.168.1.30:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - "192.168.1.26"
+  - "192.168.1.30"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]
@@ -20,24 +20,41 @@ cniConfig:
 
 nodes:
   - hostname: "talos-cp-1"
-    ipAddress: "192.168.1.25"
+    ipAddress: "192.168.1.20"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: ghcr.io/mozarik/4a5c20f197c99125dd69f6f923737557738f8621afe99817241e417e5a89a5fd
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
-          hardwareAddr: "bc:24:11:8d:20:bf"
+          hardwareAddr: "bc:24:11:f4:68:df"
         dhcp: false
         addresses:
-          - "192.168.1.25/24"
+          - "192.168.1.20/24"
         routes:
           - network: "0.0.0.0/0"
             gateway: "192.168.1.1"
         mtu: 1500
         vip:
-          ip: "192.168.1.26"
+          ip: "192.168.1.30"
+  - hostname: "talos-worker-1"
+    ipAddress: "192.168.1.21"
+    installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
+    talosImageURL: ghcr.io/mozarik/0982ac3bc2503ad2a4834b4da2b09ce2fbe9c5d522db7cf2f9063ac4122e8313
+    controlPlane: false
+    networkInterfaces:
+      - deviceSelector:
+          hardwareAddr: "bc:24:11:f0:3c:9f"
+        dhcp: false
+        addresses:
+          - "192.168.1.21/24"
+        routes:
+          - network: "0.0.0.0/0"
+            gateway: "192.168.1.1"
+        mtu: 1500
 
 # Global patches
 patches:
